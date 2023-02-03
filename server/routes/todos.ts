@@ -4,16 +4,19 @@ export const router = express.Router();
 const todos = [
   {
     id: 0,
-    name: "Todo 1",
+    text: "Todo 1",
+    done: false,
   },
   {
     id: 1,
-    name: "Todo 2",
+    text: "Todo 2",
+    done: true,
   },
-  {
-    id: 2,
-    name: 3,
-  },
+  // Invalid Todo
+  // {
+  //   id: 2,
+  //   text: 3,
+  // },
 ];
 
 router.get("/", (req, res) => {
@@ -21,7 +24,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  res.send("Create Todo");
+  todos.push({ id: todos.length + 1, ...req.body });
 });
 
 router
