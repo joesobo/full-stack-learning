@@ -1,15 +1,10 @@
 ---
+const response = await fetch("http://localhost:4000/users");
+const data = await response.json();
+
+interface User {
+  name: string;
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+{data.map((user: User) => <h1>{user.name}</h1>)}
