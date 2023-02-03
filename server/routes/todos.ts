@@ -10,6 +10,10 @@ const todos = [
     id: 1,
     name: "Todo 2",
   },
+  {
+    id: 2,
+    name: 3,
+  },
 ];
 
 router.get("/", (req, res) => {
