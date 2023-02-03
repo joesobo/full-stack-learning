@@ -1,10 +1,11 @@
 ---
-const response = await fetch("http://localhost:4000/users");
+const response = await fetch("http://localhost:4000/todos");
 const data = await response.json();
 
-interface User {
+interface Todo {
+  id: number;
   name: string;
 }
 ---
 
-{data.map((user: User) => <h1>{user.name}</h1>)}
+{data.map((todo: Todo) => <h1>{todo.name}</h1>)}
