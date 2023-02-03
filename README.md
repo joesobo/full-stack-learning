@@ -19,6 +19,7 @@ A small repo for me to play around with full-stack and attempt to find something
 - cypress
 - testing library
 - msw
+- nuxt
 
 **Want To Try:**
 - Firebase
