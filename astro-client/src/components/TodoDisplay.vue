@@ -2,118 +2,133 @@
   <div>
     <input
       v-model="newTodo"
+      class="rounded-md border border-solid border-zinc-600 p-2"
       @keyup.enter="addTodo"
-      class="border border-solid rounded-md border-zinc-600 p-2"
-    />
-    <button @click="addTodo" class="px-4 py-2 bg-zinc-300 ml-4 rounded">
+    >
+    <button
+      class="ml-4 rounded bg-zinc-300 px-4 py-2"
+      @click="addTodo"
+    >
       Add
     </button>
-    <button @click="getTodos" class="px-4 py-2 bg-zinc-300 ml-4 rounded">
+    <button
+      class="ml-4 rounded bg-zinc-300 px-4 py-2"
+      @click="getTodos"
+    >
       Refresh
     </button>
   </div>
-  <ul class="flex flex-col mt-8">
+  <ul class="mt-8 flex flex-col">
     <li
       v-for="todo in todos"
       :key="todo.id"
-      class="p-4 bg-zinc-700 border border-solid border-zinc-500 mr-2 rounded mt-2 flex justify-between"
+      class="mr-2 mt-2 flex justify-between rounded border border-solid border-zinc-500 bg-zinc-700 p-4"
     >
       <div>
-        <input type="checkbox" v-model="todo.done" @change="updateTodo(todo)" />
+        <input
+          v-model="todo.done"
+          type="checkbox"
+          @change="updateTodo(todo)"
+        >
         <input
           v-model="todo.text"
-          class="bg-transparent ml-2 text-white"
+          class="ml-2 bg-transparent text-white"
           @change="updateTodo(todo)"
-        />
+        >
       </div>
-      <button @click="removeTodo(todo)" class="ml-2 text-white">X</button>
+      <button
+        class="ml-2 text-white"
+        @click="removeTodo(todo)"
+      >
+        X
+      </button>
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from "vue";
-import { z } from "zod";
-import axios from "axios";
+import { ref, Ref, onMounted } from 'vue'
+import { z } from 'zod'
+import axios from 'axios'
 
 // Vue var setup
-const newTodo = ref("");
-let todos: Ref<Todo[]> = ref([]);
+const newTodo = ref('')
+let todos: Ref<Todo[]> = ref([])
 
 // Schema and Types
 const todoSchema = z.object({
-  id: z.number(),
-  text: z.string(),
-  done: z.boolean(),
-});
+	id: z.number(),
+	text: z.string(),
+	done: z.boolean(),
+})
 
-type Todo = z.infer<typeof todoSchema>;
+type Todo = z.infer<typeof todoSchema>
 
 // Fetching Data
 onMounted(async () => {
-  getTodos();
-});
+	getTodos()
+})
 
 // Validating Data
 const setValidTodos = (datum: unknown[]) => {
-  const validTodos: Todo[] = [];
+	const validTodos: Todo[] = []
 
-  datum.forEach((data: unknown) => {
-    const parse = todoSchema.safeParse(data);
+	datum.forEach((data: unknown) => {
+		const parse = todoSchema.safeParse(data)
 
-    if (parse.success) {
-      validTodos.push(parse.data);
-    } else {
-      parse.error.issues.forEach((issue) => {
-        let message = issue.message;
+		if (parse.success) {
+			validTodos.push(parse.data)
+		} else {
+			parse.error.issues.forEach((issue) => {
+				let message = issue.message
 
-        if (
-          issue.message === "Required" &&
-          issue.code === z.ZodIssueCode.invalid_type
-        ) {
-          message += ` ${issue.expected}`;
-        }
+				if (
+					issue.message === 'Required' &&
+					issue.code === z.ZodIssueCode.invalid_type
+				) {
+					message += ` ${issue.expected}`
+				}
 
-        console.log(
-          `Invalid Data Found: ${JSON.stringify(data)} - ${
-            issue.code
-          } - ${message}`
-        );
-      });
-    }
-  });
-  return validTodos;
-};
+				console.log(
+					`Invalid Data Found: ${JSON.stringify(data)} - ${
+						issue.code
+					} - ${message}`
+				)
+			})
+		}
+	})
+	return validTodos
+}
 
 // Read Data
 const getTodos = async () => {
-  const response = await axios.get("http://localhost:4000/todos");
-  const result = await response.data;
-  todos.value = setValidTodos(result);
-};
+	const response = await axios.get('http://localhost:4000/todos')
+	const result = await response.data
+	todos.value = setValidTodos(result)
+}
 
 // Creating Data
 const addTodo = async () => {
-  const todo = {
-    text: newTodo.value,
-    done: false,
-  };
+	const todo = {
+		text: newTodo.value,
+		done: false,
+	}
 
-  await axios.post("http://localhost:4000/todos", todo);
-  await getTodos();
+	await axios.post('http://localhost:4000/todos', todo)
+	await getTodos()
 
-  newTodo.value = "";
-};
+	newTodo.value = ''
+}
 
 // Updating Data
 const updateTodo = async (todo: Todo) => {
-  await axios.put(`http://localhost:4000/todos/${todo.id}`, todo);
-  await getTodos();
-};
+	await axios.put(`http://localhost:4000/todos/${todo.id}`, todo)
+	await getTodos()
+}
 
 // Deleting Data
 const removeTodo = async (todo: Todo) => {
-  await axios.delete(`http://localhost:4000/todos/${todo.id}`);
-  await getTodos();
-};
+	await axios.delete(`http://localhost:4000/todos/${todo.id}`)
+	await getTodos()
+}
 </script>

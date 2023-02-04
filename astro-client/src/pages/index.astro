@@ -1,14 +1,14 @@
 ---
-import TodoDisplay from "../components/TodoDisplay.vue";
-import BaseLayout from "../layout/BaseLayout.astro";
+import TodoDisplay from '../components/TodoDisplay.vue'
+import BaseLayout from '../layout/BaseLayout.astro'
 ---
 
 <BaseLayout>
-  <div
-    class="flex flex-col m-4 border border-solid border-gray-300 rounded p-4 my-4"
-  >
-    <h1 class="text-lg font-bold mb-4">Todo</h1>
+	<div
+		class="m-4 my-4 flex flex-col rounded border border-solid border-gray-300 p-4"
+	>
+		<h1 class="mb-4 text-lg font-bold">Todo</h1>
 
-    <TodoDisplay client:load />
-  </div>
+		<TodoDisplay client:load />
+	</div>
 </BaseLayout>
