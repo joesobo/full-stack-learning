@@ -5,9 +5,9 @@ A small repo for me to play around with full-stack and attempt to find something
 **Current Stack:**
 
 - FullStack
-	- TS
-	- linting
-	- prettier
+  - TS
+  - linting
+  - prettier
 - Frontend
   - Vue
   - Astro
@@ -33,3 +33,4 @@ A small repo for me to play around with full-stack and attempt to find something
 - authentication (oauth vs jwt)
 - graphql (?)
 - backend testing (mocha vs chai vs ...)
+- nx

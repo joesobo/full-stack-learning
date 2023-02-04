@@ -47,20 +47,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue'
-import { z } from 'zod'
 import axios from 'axios'
+import { Ref, onMounted, ref } from 'vue'
+import { z } from 'zod'
 
 // Vue var setup
 const newTodo = ref('')
 let todos: Ref<Todo[]> = ref([])
 
 // Schema and Types
-const todoSchema = z.object({
-	id: z.number(),
-	text: z.string(),
-	done: z.boolean(),
-})
+const todoSchema = z
+	.object({
+		id: z.number(),
+		text: z.string(),
+		done: z.boolean(),
+	})
+	.strict()
 
 type Todo = z.infer<typeof todoSchema>
 

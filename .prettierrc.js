@@ -1,5 +1,6 @@
 module.exports = {
 	plugins: [
+		require('prettier-plugin-import-sort'),
 		require('prettier-plugin-astro'),
 		require('prettier-plugin-tailwindcss'), // MUST come last
 	],
@@ -9,4 +10,12 @@ module.exports = {
 	semi: false,
 	singleQuote: true,
 	useTabs: true,
+	overrides: [
+		{
+			files: '*.astro',
+			options: {
+				parser: 'astro',
+			},
+		},
+	],
 }
