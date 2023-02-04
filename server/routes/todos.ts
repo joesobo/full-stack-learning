@@ -4,18 +4,18 @@ export const router = express.Router()
 let todos = [
 	{
 		id: 0,
-		text: 'Todo 1',
+		title: 'Todo 1',
 		done: false,
 	},
 	{
 		id: 1,
-		text: 'Todo 2',
+		title: 'Todo 2',
 		done: true,
 	},
 	// Invalid Todo
 	// {
 	//   id: 2,
-	//   text: 3,
+	//   title: 3,
 	// },
 ]
 

@@ -21,7 +21,7 @@ A small repo for me to play around with full-stack and attempt to find something
 **Upcoming:**
 
 - vitest
-- cypress
+- cypress / playwright
 - testing library
 - msw
 - circleci
