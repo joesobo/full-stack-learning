@@ -11,6 +11,7 @@ module.exports = {
 		'plugin:vuejs-accessibility/recommended',
 		'plugin:astro/recommended',
 		'plugin:@typescript-eslint/recommended',
+		'plugin:tailwindcss/recommended',
 	],
 	parser: 'vue-eslint-parser',
 	parserOptions: {
@@ -18,7 +19,13 @@ module.exports = {
 		ecmaVersion: 'latest',
 		sourceType: 'module',
 	},
-	plugins: ['vue', '@typescript-eslint', 'zod', 'vuejs-accessibility'],
+	plugins: [
+		'vue',
+		'@typescript-eslint',
+		'zod',
+		'vuejs-accessibility',
+		'tailwindcss',
+	],
 	rules: {
 		indent: ['error', 'tab'],
 		'linebreak-style': ['error', 'unix'],
@@ -26,6 +33,18 @@ module.exports = {
 		semi: ['error', 'never'],
 		'zod/prefer-enum': 'error',
 		'zod/require-strict': 'error',
+	},
+	settings: {
+		tailwindcss: {
+			config: 'astro-client/tailwind.config.js',
+			cssFiles: [
+				'**/*.css',
+				'!**/node_modules',
+				'!**/.*',
+				'!**/dist',
+				'!**/build',
+			],
+		},
 	},
 	overrides: [
 		{

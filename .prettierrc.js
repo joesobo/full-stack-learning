@@ -5,7 +5,7 @@ module.exports = {
 		require('prettier-plugin-tailwindcss'), // MUST come last
 	],
 	pluginSearchDirs: false,
-	tailwindConfig: './astro-client/tailwind.config.cjs',
+	tailwindConfig: './astro-client/tailwind.config.js',
 	trailingComma: 'es5',
 	semi: false,
 	singleQuote: true,
