@@ -4,7 +4,10 @@ A small repo for me to play around with full-stack and attempt to find something
 
 **Current Stack:**
 
-- TS
+- FullStack
+	- TS
+	- linting
+	- prettier
 - Frontend
   - Vue
   - Astro
@@ -22,8 +25,7 @@ A small repo for me to play around with full-stack and attempt to find something
 - testing library
 - msw
 - nuxt (?)
-- linting
-- prettier
+- circleci
 
 **Want To Try:**
 
