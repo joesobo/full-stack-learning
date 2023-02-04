@@ -1,8 +1,6 @@
 <template>
   <!-- Form -->
-  <data
-    class="flex flex-col"
-  >
+  <data class="flex flex-col">
     <div class="flex">
       <!-- Name -->
       <input
@@ -76,9 +74,7 @@
         <button
           class="ml-2 text-white"
           @click="removeTodo(todo)"
-        >
-          X
-        </button>
+        >X</button>
       </li>
     </ul>
   </data>
@@ -87,6 +83,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { Ref, onMounted, ref, watch } from 'vue'
+
 import { Todo, todoInputSchema, todoSchema } from './todoTypes'
 
 // Vue var setup
@@ -94,7 +91,7 @@ const todoTitle = ref('')
 const todoDescription = ref('')
 const todoColor = ref('#fff')
 const todoChecked = ref(false)
-const error: Ref<string| undefined> = ref(undefined)
+const error: Ref<string | undefined> = ref(undefined)
 const todos: Ref<Todo[]> = ref([])
 
 // Fetching Data
@@ -120,7 +117,11 @@ watch([todoTitle, todoDescription, todoChecked, todoColor], () => {
 		const issue = parse.error.issues[0]
 		console.log(issue)
 
-		if (issue?.code === 'too_small' || issue?.code === 'too_big' || issue?.code === 'invalid_string') {
+		if (
+			issue?.code === 'too_small' ||
+			issue?.code === 'too_big' ||
+			issue?.code === 'invalid_string'
+		) {
 			error.value = `${issue.path[0]}: ${issue.message}`
 			return
 		}
