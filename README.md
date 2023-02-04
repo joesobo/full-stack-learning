@@ -24,7 +24,6 @@ A small repo for me to play around with full-stack and attempt to find something
 - cypress
 - testing library
 - msw
-- nuxt (?)
 - circleci
 
 **Want To Try:**
@@ -34,3 +33,4 @@ A small repo for me to play around with full-stack and attempt to find something
 - graphql (?)
 - backend testing (mocha vs chai vs ...)
 - nx
+- prism

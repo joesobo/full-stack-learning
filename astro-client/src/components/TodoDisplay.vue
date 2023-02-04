@@ -28,6 +28,7 @@
         <input
           v-model="todo.done"
           type="checkbox"
+          aria-label="checkbox"
           @change="updateTodo(todo)"
         >
         <input

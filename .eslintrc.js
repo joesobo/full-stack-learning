@@ -24,8 +24,6 @@ module.exports = {
 		'linebreak-style': ['error', 'unix'],
 		quotes: ['error', 'single'],
 		semi: ['error', 'never'],
-		// Dont really care about forms with labels
-		'vuejs-accessibility/form-control-has-label': 'off',
 		'zod/prefer-enum': 'error',
 		'zod/require-strict': 'error',
 	},
