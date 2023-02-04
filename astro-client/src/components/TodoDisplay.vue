@@ -3,28 +3,30 @@
     <input
       v-model="newTodo"
       @keyup.enter="addTodo"
-      class="border border-solid rounded-md border-gray-600 p-2"
+      class="border border-solid rounded-md border-zinc-600 p-2"
     />
-    <button @click="addTodo" class="px-4 py-2 bg-gray-300 ml-4 rounded">
+    <button @click="addTodo" class="px-4 py-2 bg-zinc-300 ml-4 rounded">
       Add
     </button>
-    <button @click="getTodos" class="px-4 py-2 bg-gray-300 ml-4 rounded">
+    <button @click="getTodos" class="px-4 py-2 bg-zinc-300 ml-4 rounded">
       Refresh
     </button>
   </div>
-  <ul class="flex mt-4">
+  <ul class="flex flex-col mt-8">
     <li
       v-for="todo in todos"
       :key="todo.id"
-      class="p-4 bg-blue-300 mr-2 block rounded"
+      class="p-4 bg-zinc-700 border border-solid border-zinc-500 mr-2 rounded mt-2 flex justify-between"
     >
-      <input type="checkbox" v-model="todo.done" @change="updateTodo(todo)" />
-      <input
-        v-model="todo.text"
-        class="bg-transparent ml-2"
-        @change="updateTodo(todo)"
-      />
-      <button @click="removeTodo(todo)" class="ml-2">X</button>
+      <div>
+        <input type="checkbox" v-model="todo.done" @change="updateTodo(todo)" />
+        <input
+          v-model="todo.text"
+          class="bg-transparent ml-2 text-white"
+          @change="updateTodo(todo)"
+        />
+      </div>
+      <button @click="removeTodo(todo)" class="ml-2 text-white">X</button>
     </li>
   </ul>
 </template>

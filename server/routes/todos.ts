@@ -20,8 +20,7 @@ let todos = [
 ];
 
 router.get("/", (req, res) => {
-  res.json(todos);
-  res.sendStatus(200);
+  res.json(todos).status(200);
 });
 
 router.post("/", (req, res) => {
@@ -31,9 +30,6 @@ router.post("/", (req, res) => {
 
 router
   .route("/:id")
-  .get((req, res) => {
-    // res.send(`Get Todo Details ${req.params.id}`);
-  })
   .put((req, res) => {
     todos[todos.findIndex((todo) => todo.id === Number(req.params.id))] =
       req.body;
