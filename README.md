@@ -29,7 +29,7 @@ A small repo for me to play around with full-stack and attempt to find something
 
 **Want To Try:**
 
-- authentication (oauth vs jwt)
+- authentication (oauth vs jwt vs firebase)
 - graphql (?)
 - backend testing (mocha vs chai vs ...)
 - nx
