@@ -123,7 +123,6 @@ const todos: Ref<Todo[]> = ref([])
 
 // Fetching Data
 onMounted(async () => {
-	console.log(import.meta.env)
 	await getTodos()
 })
 
@@ -193,7 +192,10 @@ const addTodo = async () => {
 	}
 
 	if (!error.value) {
-		const response = await axios.post(`${import.meta.env.PUBLIC_SERVER_URL}/todos`, todo)
+		const response = await axios.post(
+			`${import.meta.env.PUBLIC_SERVER_URL}/todos`,
+			todo
+		)
 		const result = await response.data
 		todos.value = setValidTodos(result)
 
@@ -214,7 +216,9 @@ const updateTodo = async (todo: Todo) => {
 
 // Deleting Data
 const removeTodo = async (todo: Todo) => {
-	const response = await axios.delete(`${import.meta.env.PUBLIC_SERVER_URL}/todos/${todo.id}`)
+	const response = await axios.delete(
+		`${import.meta.env.PUBLIC_SERVER_URL}/todos/${todo.id}`
+	)
 	const result = await response.data
 	todos.value = setValidTodos(result)
 }
