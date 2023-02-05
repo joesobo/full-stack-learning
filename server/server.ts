@@ -1,6 +1,6 @@
 import cors from 'cors'
-import express from 'express'
 
+import express from 'express'
 import { router as todoRouter } from './routes/todos'
 
 const app: express.Application = express()

@@ -1,7 +1,9 @@
+import { deleteTodo, updateTodo } from './../firebase'
 import express from 'express'
+import { addTodo, getTodos } from '../firebase'
 export const router = express.Router()
 
-let todos = [
+let todos: unknown[] = [
 	{
 		id: 0,
 		title: 'Todo 1',
@@ -19,26 +21,32 @@ let todos = [
 	// },
 ]
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+	todos = await getTodos()
 	res.json(todos).status(200)
 })
 
-router.post('/', (req, res) => {
-	todos.push({ id: todos.length + 1, ...req.body })
-	res.sendStatus(200)
+router.post('/', async (req, res) => {
+	await addTodo(req.body)
+	todos = await getTodos()
+	res.json(todos).status(200)
 })
 
 router
 	.route('/:id')
-	.put((req, res) => {
-		todos[todos.findIndex((todo) => todo.id === Number(req.params.id))] =
-			req.body
+	.put(async (req, res) => {
+		// todos[todos.findIndex((todo) => todo.id === Number(req.params.id))] =
+		// 	req.body
 
-		res.sendStatus(200)
+		await updateTodo(req.body)
+		todos = await getTodos()
+		res.json(todos).status(200)
 	})
-	.delete((req, res) => {
-		todos = todos.filter((todo) => {
-			return todo.id !== Number(req.params.id)
-		})
-		res.sendStatus(200)
+	.delete(async (req, res) => {
+		// todos = todos.filter((todo) => {
+		// 	return todo.id !== Number(req.params.id)
+		// })
+		await deleteTodo(req.params.id)
+		todos = await getTodos()
+		res.json(todos).status(200)
 	})

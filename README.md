@@ -17,6 +17,7 @@ A small repo for me to play around with full-stack and attempt to find something
 - Backend
   - NodeJS
   - Express
+	- Firebase
 
 **Upcoming:**
 
@@ -28,7 +29,6 @@ A small repo for me to play around with full-stack and attempt to find something
 
 **Want To Try:**
 
-- Firebase
 - authentication (oauth vs jwt)
 - graphql (?)
 - backend testing (mocha vs chai vs ...)

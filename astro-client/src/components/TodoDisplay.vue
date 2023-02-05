@@ -165,8 +165,9 @@ const addTodo = async () => {
 	}
 
 	if (!error.value) {
-		await axios.post('http://localhost:4000/todos', todo)
-		await getTodos()
+		const response = await axios.post('http://localhost:4000/todos', todo)
+		const result = await response.data
+		todos.value = setValidTodos(result)
 
 		// Reset Form
 		resetForm()
@@ -175,14 +176,16 @@ const addTodo = async () => {
 
 // Updating Data
 const updateTodo = async (todo: Todo) => {
-	await axios.put(`http://localhost:4000/todos/${todo.id}`, todo)
-	await getTodos()
+	const response = await axios.put(`http://localhost:4000/todos/${todo.id}`, todo)
+	const result = await response.data
+	todos.value = setValidTodos(result)
 }
 
 // Deleting Data
 const removeTodo = async (todo: Todo) => {
-	await axios.delete(`http://localhost:4000/todos/${todo.id}`)
-	await getTodos()
+	const response = await axios.delete(`http://localhost:4000/todos/${todo.id}`)
+	const result = await response.data
+	todos.value = setValidTodos(result)
 }
 
 // Reset Form
