@@ -5,6 +5,8 @@ import {
 	deleteDoc,
 	doc,
 	getDocs,
+	orderBy,
+	query,
 	updateDoc,
 } from 'firebase/firestore'
 
@@ -12,7 +14,10 @@ import { db } from './firebase'
 
 export const getTodos = async () => {
 	const todos: unknown[] = []
-	const todosSnapshot = await getDocs(collection(db, 'todos'))
+
+	const q = query(collection(db, 'todos'), orderBy('title', 'asc'))
+	const todosSnapshot = await getDocs(q)
+
 	todosSnapshot.forEach((doc) => {
 		todos.push({ id: doc.id, ...doc.data() })
 	})
