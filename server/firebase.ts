@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv'
 import { initializeApp } from 'firebase/app'
 import {
 	FieldValue,
@@ -9,7 +10,6 @@ import {
 	getFirestore,
 	updateDoc,
 } from 'firebase/firestore'
-import * as dotenv from 'dotenv'
 dotenv.config()
 
 const firebaseConfig = {

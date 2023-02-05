@@ -1,5 +1,6 @@
-import { deleteTodo, updateTodo } from './../firebase'
 import express from 'express'
+
+import { deleteTodo, updateTodo } from './../firebase'
 import { addTodo, getTodos } from '../firebase'
 export const router = express.Router()
 

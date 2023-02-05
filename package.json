@@ -28,7 +28,7 @@
 		"typescript": "^4.9.5"
 	},
 	"importSort": {
-		".js, .jsx, .ts, .tsx, .vue, .astro": {
+		".js, .ts, .vue, .astro": {
 			"style": "module",
 			"parser": "typescript"
 		}

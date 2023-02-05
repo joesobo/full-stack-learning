@@ -17,7 +17,7 @@ A small repo for me to play around with full-stack and attempt to find something
 - Backend
   - NodeJS
   - Express
-	- Firebase
+  - Firebase
 
 **Upcoming:**
 

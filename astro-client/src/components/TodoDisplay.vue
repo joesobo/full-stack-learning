@@ -56,7 +56,13 @@
         v-for="todo in todos"
         :key="todo.id"
         class="mr-2 mt-2 flex flex-col rounded border border-solid border-zinc-500 p-4"
-        :class="pickTextColorBasedOnBgColorAdvanced(todo.color, 'text-white', 'text-black')"
+        :class="
+          pickTextColorBasedOnBgColorAdvanced(
+            todo.color,
+            'text-white',
+            'text-black'
+          )
+        "
         :style="`background-color: ${todo.color}`"
       >
         <div class="flex justify-between">
@@ -84,7 +90,13 @@
           <input
             v-model="todo.description"
             class="mt-2 bg-transparent text-sm"
-            :class="pickTextColorBasedOnBgColorAdvanced(todo.color, 'text-gray-300', 'text-gray-700')"
+            :class="
+              pickTextColorBasedOnBgColorAdvanced(
+                todo.color,
+                'text-gray-300',
+                'text-gray-700'
+              )
+            "
             aria-label="Todo Description"
             @change="updateTodo(todo)"
           >
@@ -97,9 +109,9 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { Ref, onMounted, ref, watch } from 'vue'
-import { pickTextColorBasedOnBgColorAdvanced } from '../utils/colorPicker'
 
-import { Todo, todoInputSchema, todoSchema } from './todoTypes'
+import { pickTextColorBasedOnBgColorAdvanced } from '../utils/colorPicker'
+import { Todo, todoInputSchema, todoSchema } from '../utils/todoTypes'
 
 // Vue var setup
 const todoTitle = ref('')
@@ -111,6 +123,7 @@ const todos: Ref<Todo[]> = ref([])
 
 // Fetching Data
 onMounted(async () => {
+	console.log(import.meta.env)
 	await getTodos()
 })
 
@@ -165,7 +178,7 @@ const setValidTodos = (datum: unknown[]) => {
 
 // Read Data
 const getTodos = async () => {
-	const response = await axios.get('http://localhost:4000/todos')
+	const response = await axios.get(`${import.meta.env.PUBLIC_SERVER_URL}/todos`)
 	const result = await response.data
 	todos.value = setValidTodos(result)
 }
@@ -180,7 +193,7 @@ const addTodo = async () => {
 	}
 
 	if (!error.value) {
-		const response = await axios.post('http://localhost:4000/todos', todo)
+		const response = await axios.post(`${import.meta.env.PUBLIC_SERVER_URL}/todos`, todo)
 		const result = await response.data
 		todos.value = setValidTodos(result)
 
@@ -191,14 +204,17 @@ const addTodo = async () => {
 
 // Updating Data
 const updateTodo = async (todo: Todo) => {
-	const response = await axios.put(`http://localhost:4000/todos/${todo.id}`, todo)
+	const response = await axios.put(
+		`${import.meta.env.PUBLIC_SERVER_URL}/todos/${todo.id}`,
+		todo
+	)
 	const result = await response.data
 	todos.value = setValidTodos(result)
 }
 
 // Deleting Data
 const removeTodo = async (todo: Todo) => {
-	const response = await axios.delete(`http://localhost:4000/todos/${todo.id}`)
+	const response = await axios.delete(`${import.meta.env.PUBLIC_SERVER_URL}/todos/${todo.id}`)
 	const result = await response.data
 	todos.value = setValidTodos(result)
 }
