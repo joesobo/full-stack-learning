@@ -55,26 +55,40 @@
       <li
         v-for="todo in todos"
         :key="todo.id"
-        class="mr-2 mt-2 flex justify-between rounded border border-solid border-zinc-500 bg-zinc-700 p-4"
+        class="mr-2 mt-2 flex flex-col rounded border border-solid border-zinc-500 p-4"
+        :class="pickTextColorBasedOnBgColorAdvanced(todo.color, 'text-white', 'text-black')"
+        :style="`background-color: ${todo.color}`"
       >
+        <div class="flex justify-between">
+          <div class="flex">
+            <input
+              v-model="todo.done"
+              type="checkbox"
+              aria-label="Todo Checkbox"
+              @change="updateTodo(todo)"
+            >
+            <input
+              v-model="todo.title"
+              class="ml-2 bg-transparent"
+              aria-label="Todo Title"
+              @change="updateTodo(todo)"
+            >
+          </div>
+          <button
+            class="ml-2"
+            @click="removeTodo(todo)"
+          >X</button>
+        </div>
+
         <div>
           <input
-            v-model="todo.done"
-            type="checkbox"
-            aria-label="Todo Checkbox"
-            @change="updateTodo(todo)"
-          >
-          <input
-            v-model="todo.title"
-            class="ml-2 bg-transparent text-white"
-            aria-label="Todo Title"
+            v-model="todo.description"
+            class="mt-2 bg-transparent text-sm"
+            :class="pickTextColorBasedOnBgColorAdvanced(todo.color, 'text-gray-300', 'text-gray-700')"
+            aria-label="Todo Description"
             @change="updateTodo(todo)"
           >
         </div>
-        <button
-          class="ml-2 text-white"
-          @click="removeTodo(todo)"
-        >X</button>
       </li>
     </ul>
   </data>
@@ -83,13 +97,14 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { Ref, onMounted, ref, watch } from 'vue'
+import { pickTextColorBasedOnBgColorAdvanced } from '../utils/colorPicker'
 
 import { Todo, todoInputSchema, todoSchema } from './todoTypes'
 
 // Vue var setup
 const todoTitle = ref('')
 const todoDescription = ref('')
-const todoColor = ref('#fff')
+const todoColor = ref('#000')
 const todoChecked = ref(false)
 const error: Ref<string | undefined> = ref(undefined)
 const todos: Ref<Todo[]> = ref([])
@@ -193,7 +208,7 @@ const resetForm = () => {
 	todoTitle.value = ''
 	todoDescription.value = ''
 	todoChecked.value = false
-	todoColor.value = '#fff'
+	todoColor.value = '#000'
 
 	error.value = undefined
 }
