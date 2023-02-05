@@ -20,7 +20,7 @@ export const todoSchema = z
 
 // Validate the data we get from the server
 export const todoInputSchema = todoSchema.extend({
-	id: z.number(),
+	id: z.string(),
 })
 
 export type Todo = z.infer<typeof todoInputSchema>

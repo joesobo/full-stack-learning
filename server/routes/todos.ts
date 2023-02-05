@@ -38,7 +38,7 @@ router
 		// todos[todos.findIndex((todo) => todo.id === Number(req.params.id))] =
 		// 	req.body
 
-		await updateTodo(req.body)
+		await updateTodo(req.body, req.params.id)
 		todos = await getTodos()
 		res.json(todos).status(200)
 	})

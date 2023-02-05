@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import {
+	FieldValue,
 	addDoc,
 	collection,
 	deleteDoc,
@@ -27,7 +28,7 @@ export const getTodos = async () => {
 	const todos: unknown[] = []
 	const todosSnapshot = await getDocs(collection(db, 'todos'))
 	todosSnapshot.forEach((doc) => {
-		todos.push({ id: todos.length + 1, ...doc.data() })
+		todos.push({ id: doc.id, ...doc.data() })
 	})
 	return todos
 }
@@ -41,8 +42,13 @@ export const addTodo = async (todo: unknown) => {
 	}
 }
 
-export const updateTodo = async (todo: unknown) => {
-	await updateDoc(doc(db, 'todos', ''), { todo })
+export const updateTodo = async (
+	todo: {
+		[x: string]: FieldValue | Partial<unknown> | undefined
+	},
+	id: string
+) => {
+	await updateDoc(doc(db, 'todos', id), todo)
 }
 
 export const deleteTodo = async (id: string) => {
