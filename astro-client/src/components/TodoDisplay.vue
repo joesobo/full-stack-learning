@@ -68,7 +68,7 @@
         <div class="flex justify-between">
           <div class="flex">
             <input
-              v-model="todo.done"
+              v-model="todo.completed"
               type="checkbox"
               aria-label="Todo Checkbox"
               @change="updateTodo(todo)"
@@ -107,31 +107,95 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
-import { Ref, onMounted, ref, watch } from 'vue'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import { Ref, computed, ref, watch } from 'vue'
 
+import {
+	ADD_TODO,
+	DELETE_TODO,
+	UPDATE_TODO,
+} from '../graphql/mutations/todoMutations'
+import { GET_TODOS } from '../graphql/queries/todoQueries'
 import { pickTextColorBasedOnBgColorAdvanced } from '../utils/colorPicker'
 import { Todo, todoInputSchema, todoSchema } from '../utils/todoTypes'
 
 // Vue var setup
+const currentTodo: Ref<Todo | undefined> = ref(undefined)
 const todoTitle = ref('')
 const todoDescription = ref('')
 const todoColor = ref('#000')
 const todoChecked = ref(false)
 const error: Ref<string | undefined> = ref(undefined)
-const todos: Ref<Todo[]> = ref([])
 
 // Fetching Data
-onMounted(async () => {
-	await getTodos()
-})
+const { result: queryTodos } = useQuery(GET_TODOS)
+const todos = computed(() => setValidTodos(queryTodos.value?.todosGQL) ?? [])
+const { mutate: addTodoGQL } = useMutation(ADD_TODO, () => ({
+	variables: {
+		title: todoTitle.value,
+		description: todoDescription.value,
+		completed: todoChecked.value,
+		color: todoColor.value,
+	},
+	update: (store) => {
+		const data = store.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
+		// TODO: fix error here!
+		const updatedData = [
+			{
+				title: todoTitle.value,
+				description: todoDescription.value,
+				completed: todoChecked.value,
+				color: todoColor.value,
+			},
+			...data.todosGQL,
+		]
+		store.writeQuery({ query: GET_TODOS, data: { todosGQL: updatedData } })
+	},
+}))
+const { mutate: updateTodoGQL } = useMutation(UPDATE_TODO, () => ({
+	variables: {
+		id: currentTodo.value?.id,
+		title: todoTitle.value,
+		description: todoDescription.value,
+		completed: todoChecked.value,
+		color: todoColor.value,
+	},
+	update: (store) => {
+		const data = store.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
+		const updatedData = data.todosGQL.map((todo) => {
+			if (todo.id === currentTodo.value?.id) {
+				return {
+					...todo,
+					title: todoTitle.value,
+					description: todoDescription.value,
+					completed: todoChecked.value,
+					color: todoColor.value,
+				}
+			}
+			return todo
+		})
+		store.writeQuery({ query: GET_TODOS, data: { todosGQL: updatedData } })
+	},
+}))
+const { mutate: deleteTodoGQL } = useMutation(DELETE_TODO, () => ({
+	variables: {
+		id: currentTodo.value?.id,
+	},
+	update: (store) => {
+		const data = store.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
+		const updatedData = data.todosGQL.filter(
+			(w) => w.id !== currentTodo.value?.id
+		)
+		store.writeQuery({ query: GET_TODOS, data: { todosGQL: updatedData } })
+	},
+}))
 
 // Validate Input
 watch([todoTitle, todoDescription, todoChecked, todoColor], () => {
 	const todo = {
 		title: todoTitle.value,
 		description: todoDescription.value,
-		done: todoChecked.value,
+		completed: todoChecked.value,
 		color: todoColor.value,
 	}
 
@@ -142,7 +206,6 @@ watch([todoTitle, todoDescription, todoChecked, todoColor], () => {
 		error.value = undefined
 	} else {
 		const issue = parse.error.issues[0]
-		console.log(issue)
 
 		if (
 			issue?.code === 'too_small' ||
@@ -159,13 +222,15 @@ watch([todoTitle, todoDescription, todoChecked, todoColor], () => {
 
 // Validating Data (only return data that matches our zod schema)
 const setValidTodos = (datum: unknown[]) => {
+	if (!datum) return []
+
 	const validTodos: Todo[] = []
 
 	datum.forEach((data: unknown) => {
 		const parse = todoInputSchema.safeParse(data)
 
 		if (parse.success) {
-			validTodos.push(parse.data)
+			validTodos.push({ ...parse.data, color: parse.data.color || '#000' })
 		} else {
 			parse.error.issues.forEach((issue) => {
 				console.log(issue)
@@ -175,52 +240,23 @@ const setValidTodos = (datum: unknown[]) => {
 	return validTodos
 }
 
-// Read Data
-const getTodos = async () => {
-	const response = await axios.get(`${import.meta.env.PUBLIC_SERVER_URL}/todos`)
-	const result = await response.data
-	todos.value = setValidTodos(result)
-}
-
 // Creating Data
 const addTodo = async () => {
-	const todo = {
-		title: todoTitle.value,
-		description: todoDescription.value,
-		done: todoChecked.value,
-		color: todoColor.value,
-	}
-
 	if (!error.value) {
-		const response = await axios.post(
-			`${import.meta.env.PUBLIC_SERVER_URL}/todos`,
-			todo
-		)
-		const result = await response.data
-		todos.value = setValidTodos(result)
-
-		// Reset Form
-		resetForm()
+		addTodoGQL()
 	}
 }
 
 // Updating Data
 const updateTodo = async (todo: Todo) => {
-	const response = await axios.put(
-		`${import.meta.env.PUBLIC_SERVER_URL}/todos/${todo.id}`,
-		todo
-	)
-	const result = await response.data
-	todos.value = setValidTodos(result)
+	currentTodo.value = todo
+	updateTodoGQL()
 }
 
 // Deleting Data
 const removeTodo = async (todo: Todo) => {
-	const response = await axios.delete(
-		`${import.meta.env.PUBLIC_SERVER_URL}/todos/${todo.id}`
-	)
-	const result = await response.data
-	todos.value = setValidTodos(result)
+	currentTodo.value = todo
+	deleteTodoGQL()
 }
 
 // Reset Form

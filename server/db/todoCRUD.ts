@@ -4,6 +4,7 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	getDoc,
 	getDocs,
 	orderBy,
 	query,
@@ -22,6 +23,11 @@ export const getTodos = async () => {
 		todos.push({ id: doc.id, ...doc.data() })
 	})
 	return todos
+}
+
+export const getTodo = async (id: string) => {
+	const todo = await getDoc(doc(db, 'todos', id))
+	return { id: todo.id, ...todo.data() }
 }
 
 export const addTodo = async (todo: unknown) => {
