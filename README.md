@@ -33,3 +33,5 @@ A small repo for me to play around with full-stack and attempt to find something
 - backend testing (mocha vs chai vs ...)
 - nx
 - prism
+- svelte
+- solid

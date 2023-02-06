@@ -120,12 +120,12 @@ import { pickTextColorBasedOnBgColorAdvanced } from '../utils/colorPicker'
 import { Todo, todoInputSchema, todoSchema } from '../utils/todoTypes'
 
 // Vue var setup
-const currentTodo: Ref<Todo | undefined> = ref(undefined)
 const todoTitle = ref('')
 const todoDescription = ref('')
 const todoColor = ref('#000')
 const todoChecked = ref(false)
 const error: Ref<string | undefined> = ref(undefined)
+const storeTodo: Ref<Todo | undefined> = ref(undefined)
 
 // Fetching Data
 const { result: queryTodos } = useQuery(GET_TODOS)
@@ -137,39 +137,22 @@ const { mutate: addTodoGQL } = useMutation(ADD_TODO, () => ({
 		completed: todoChecked.value,
 		color: todoColor.value,
 	},
-	update: (store) => {
-		const data = store.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
-		// TODO: fix error here!
-		const updatedData = [
-			{
-				title: todoTitle.value,
-				description: todoDescription.value,
-				completed: todoChecked.value,
-				color: todoColor.value,
-			},
-			...data.todosGQL,
-		]
-		store.writeQuery({ query: GET_TODOS, data: { todosGQL: updatedData } })
-	},
+	refetchQueries: [
+		{query: GET_TODOS},
+		'getTodosGQL'
+	],
 }))
 const { mutate: updateTodoGQL } = useMutation(UPDATE_TODO, () => ({
-	variables: {
-		id: currentTodo.value?.id,
-		title: todoTitle.value,
-		description: todoDescription.value,
-		completed: todoChecked.value,
-		color: todoColor.value,
-	},
 	update: (store) => {
 		const data = store.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
 		const updatedData = data.todosGQL.map((todo) => {
-			if (todo.id === currentTodo.value?.id) {
+			if (todo.id === storeTodo.value?.id) {
 				return {
 					...todo,
-					title: todoTitle.value,
-					description: todoDescription.value,
-					completed: todoChecked.value,
-					color: todoColor.value,
+					title: storeTodo.value?.title,
+					description: storeTodo.value?.description,
+					completed: storeTodo.value?.completed,
+					color: storeTodo.value?.color,
 				}
 			}
 			return todo
@@ -178,15 +161,12 @@ const { mutate: updateTodoGQL } = useMutation(UPDATE_TODO, () => ({
 	},
 }))
 const { mutate: deleteTodoGQL } = useMutation(DELETE_TODO, () => ({
-	variables: {
-		id: currentTodo.value?.id,
-	},
-	update: (store) => {
-		const data = store.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
+	update: (cache) => {
+		const data = cache.readQuery({ query: GET_TODOS }) as { todosGQL: Todo[] }
 		const updatedData = data.todosGQL.filter(
-			(w) => w.id !== currentTodo.value?.id
+			(w) => w.id !== storeTodo.value?.id
 		)
-		store.writeQuery({ query: GET_TODOS, data: { todosGQL: updatedData } })
+		cache.writeQuery({ query: GET_TODOS, data: { todosGQL: updatedData } })
 	},
 }))
 
@@ -243,20 +223,28 @@ const setValidTodos = (datum: unknown[]) => {
 // Creating Data
 const addTodo = async () => {
 	if (!error.value) {
-		addTodoGQL()
+		await addTodoGQL()
 	}
 }
 
 // Updating Data
 const updateTodo = async (todo: Todo) => {
-	currentTodo.value = todo
-	updateTodoGQL()
+	storeTodo.value = todo
+	await updateTodoGQL({
+		id: todo.id,
+		title: todo.title,
+		description: todo.description,
+		completed: todo.completed,
+		color: todo.color,
+	})
 }
 
 // Deleting Data
 const removeTodo = async (todo: Todo) => {
-	currentTodo.value = todo
-	deleteTodoGQL()
+	storeTodo.value = todo
+	await deleteTodoGQL({
+		id: todo.id,
+	})
 }
 
 // Reset Form
