@@ -1,4 +1,5 @@
 ---
+import TodoDisplay from '../components/TodoDisplay.svelte'
 import BaseLayout from '../layout/BaseLayout.astro'
 ---
 
@@ -7,5 +8,7 @@ import BaseLayout from '../layout/BaseLayout.astro'
 		class="my-4 flex flex-col rounded border border-solid border-gray-300 p-4"
 	>
 		<h1 class="mb-4 text-lg font-bold">Todos in Svelte</h1>
+
+		<TodoDisplay client:load />
 	</div>
 </BaseLayout>

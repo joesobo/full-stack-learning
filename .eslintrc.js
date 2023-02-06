@@ -22,6 +22,7 @@ module.exports = {
 	},
 	plugins: [
 		'vue',
+		'svelte3',
 		'@typescript-eslint',
 		'zod',
 		'vuejs-accessibility',
@@ -37,7 +38,7 @@ module.exports = {
 	},
 	settings: {
 		tailwindcss: {
-			config: 'astro-client/tailwind.config.js',
+			config: 'astro-client/tailwind.config.cjs',
 			cssFiles: [
 				'**/*.css',
 				'!**/node_modules',
@@ -46,6 +47,7 @@ module.exports = {
 				'!**/build',
 			],
 		},
+		'svelte3/typescript': true,
 	},
 	overrides: [
 		{
@@ -55,6 +57,10 @@ module.exports = {
 				parser: '@typescript-eslint/parser',
 				extraFileExtensions: ['.astro'],
 			},
+		},
+		{
+			files: ['*.svelte'],
+			processor: 'svelte3/svelte3',
 		},
 	],
 }

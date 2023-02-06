@@ -1,6 +1,6 @@
 <template>
   <!-- Form -->
-  <data class="flex flex-col">
+  <div class="flex flex-col">
     <div class="flex">
       <!-- Name -->
       <input
@@ -34,7 +34,9 @@
     <p
       v-if="error"
       class="mt-2 font-bold text-red-500"
-    >{{ error }}</p>
+    >
+      {{ error }}
+    </p>
     <div class="mt-2 flex">
       <button
         class="rounded bg-zinc-300 px-4 py-2"
@@ -83,7 +85,9 @@
           <button
             class="ml-2"
             @click="removeTodo(todo)"
-          >X</button>
+          >
+            X
+          </button>
         </div>
 
         <div>
@@ -103,7 +107,7 @@
         </div>
       </li>
     </ul>
-  </data>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -137,10 +141,7 @@ const { mutate: addTodoGQL } = useMutation(ADD_TODO, () => ({
 		completed: todoChecked.value,
 		color: todoColor.value,
 	},
-	refetchQueries: [
-		{query: GET_TODOS},
-		'getTodosGQL'
-	],
+	refetchQueries: [{ query: GET_TODOS }, 'getTodosGQL'],
 }))
 const { mutate: updateTodoGQL } = useMutation(UPDATE_TODO, () => ({
 	update: (store) => {

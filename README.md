@@ -8,7 +8,7 @@ A small repo for me to play around with full-stack and attempt to find something
   - TS
   - linting
   - prettier
-	- graphql / apollo
+  - graphql / apollo
 - Frontend
   - Vue
   - Astro
