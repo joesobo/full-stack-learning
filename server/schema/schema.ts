@@ -15,7 +15,7 @@ import {
 	getTodos,
 	updateTodo,
 } from '../db/todoCRUD'
-import { addUser, loginUser } from '../db/userCRUD'
+import { addUser, getUser, loginUser, logoutUser } from '../db/userCRUD'
 
 // Todo Type
 const TodoType = new GraphQLObjectType({
@@ -29,6 +29,17 @@ const TodoType = new GraphQLObjectType({
 	}),
 })
 
+const ReturnUserType = new GraphQLObjectType({
+	name: 'ReturnUser',
+	fields: () => ({
+		uid: { type: GraphQLID },
+		email: { type: GraphQLString },
+		userName: { type: GraphQLString },
+		status: { type: GraphQLString },
+		message: { type: GraphQLString },
+	}),
+})
+
 // User Type
 const UserType = new GraphQLObjectType({
 	name: 'User',
@@ -36,7 +47,6 @@ const UserType = new GraphQLObjectType({
 		id: { type: GraphQLID },
 		email: { type: GraphQLString },
 		password: { type: GraphQLString },
-		currentUser: { type: GraphQLString },
 		status: { type: GraphQLString },
 		message: { type: GraphQLString },
 	}),
@@ -56,6 +66,14 @@ const RootQuery = new GraphQLObjectType({
 			args: { id: { type: GraphQLID } },
 			resolve(parent, args) {
 				return getTodo(args.id)
+			},
+		},
+		getUser: {
+			type: ReturnUserType,
+			async resolve(parent, args) {
+				const test = await getUser()
+				console.log(test)
+				return test
 			},
 		},
 	},
@@ -129,6 +147,12 @@ const RootMutations = new GraphQLObjectType({
 			},
 			async resolve(parent, args) {
 				return await addUser(args.email, args.password)
+			},
+		},
+		logout: {
+			type: UserType,
+			async resolve(parent, args) {
+				return await logoutUser()
 			},
 		},
 	},

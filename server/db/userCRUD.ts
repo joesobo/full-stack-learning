@@ -4,28 +4,41 @@ import {
 	signInWithEmailAndPassword,
 } from 'firebase/auth'
 
+export const getUser = async () => {
+	const auth = getAuth()
+	const currentUser = auth.currentUser
+
+	if (currentUser) {
+		const uid = currentUser.uid
+		const email = currentUser.email
+		const userName = currentUser.displayName
+
+		return {
+			uid,
+			email,
+			userName,
+			status: 200,
+		}
+	} else {
+		return {
+			status: 400,
+		}
+	}
+}
+
 export const addUser = async (email: string, password: string) => {
 	const auth = getAuth()
 	return await createUserWithEmailAndPassword(auth, email, password)
 		.then(async () => {
-			const token = await auth.currentUser?.getIdToken()
-
 			return {
-				currentUser: JSON.stringify({
-					uid: auth.currentUser?.uid,
-					email: auth.currentUser?.email,
-					userName: auth.currentUser?.providerData[0].displayName,
-					token,
-				}),
 				message: 'User Registered with Email: ' + email,
 				status: 200,
 			}
 		})
 		.catch((error) => {
 			return {
-				currentUser: '',
-				message: error.message,
-				status: error.code,
+				message: error.code,
+				status: 400,
 			}
 		})
 }
@@ -34,24 +47,25 @@ export const loginUser = async (email: string, password: string) => {
 	const auth = getAuth()
 	return await signInWithEmailAndPassword(auth, email, password)
 		.then(async () => {
-			const token = await auth.currentUser?.getIdToken()
-
 			return {
-				currentUser: JSON.stringify({
-					uid: auth.currentUser?.uid,
-					email: auth.currentUser?.email,
-					userName: auth.currentUser?.providerData[0].displayName,
-					token,
-				}),
 				message: 'User Logged in with Email: ' + email,
 				status: 200,
 			}
 		})
 		.catch((error) => {
 			return {
-				currentUser: '',
-				message: error.message,
-				status: error.code,
+				message: error.code,
+				status: 400,
 			}
 		})
+}
+
+export const logoutUser = async () => {
+	const auth = getAuth()
+	return await auth.signOut().then(() => {
+		return {
+			message: 'User Logged out',
+			status: 200,
+		}
+	})
 }

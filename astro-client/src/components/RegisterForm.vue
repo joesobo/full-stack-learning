@@ -14,6 +14,12 @@
       class="mt-4"
       aria-label="Password"
     >
+    <p
+      v-if="error"
+      class="mt-4 text-sm text-gray-300"
+    >
+      {{ error }}
+    </p>
     <div>
       <button
         class="mt-4 rounded border border-white p-2 text-white"
@@ -28,6 +34,12 @@
         Sign In With Google
       </button>
     </div>
+    <a
+      href="/login"
+      class="mt-4 text-sm text-gray-300"
+    >
+      Already have an account? Sign in
+    </a>
   </div>
 </template>
 
@@ -39,6 +51,7 @@ import { ADD_USER } from '../graphql/mutations/userMutations'
 
 const email = ref('')
 const password = ref('')
+const error = ref()
 
 const { mutate: registerGQL } = useMutation(ADD_USER, () => ({
 	variables: {
@@ -53,10 +66,20 @@ const register = async () => {
 
 	if (data.status === '200') {
 		console.log('SUCCESS: ', data.message)
-		window.localStorage.setItem('currentUser', data.currentUser)
 		window.location.href = '/'
 	} else {
 		console.log('ERROR: ', data.message)
+		switch (data.message) {
+		case 'auth/invalid-email':
+			error.value = 'Invalid email'
+			break
+		case 'auth/invalid-password':
+			error.value = 'Invalid password'
+			break
+		default:
+			error.value = 'Invalid email or password'
+			break
+		}
 	}
 }
 
