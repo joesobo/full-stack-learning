@@ -66,7 +66,6 @@ const login = async () => {
 		console.log('SUCCESS: ', data.message)
 		window.location.href = '/'
 	} else {
-		console.log(data)
 		switch (data.message) {
 		case 'auth/invalid-email':
 			error.value = 'Invalid email'

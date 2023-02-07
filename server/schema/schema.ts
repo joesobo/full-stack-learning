@@ -64,16 +64,14 @@ const RootQuery = new GraphQLObjectType({
 		todoGQL: {
 			type: TodoType,
 			args: { id: { type: GraphQLID } },
-			resolve(parent, args) {
-				return getTodo(args.id)
+			async resolve(parent, args) {
+				return await getTodo(args.id)
 			},
 		},
 		getUser: {
 			type: ReturnUserType,
 			async resolve(parent, args) {
-				const test = await getUser()
-				console.log(test)
-				return test
+				return await getUser()
 			},
 		},
 	},
