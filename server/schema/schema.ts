@@ -15,6 +15,7 @@ import {
 	getTodos,
 	updateTodo,
 } from '../db/todoCRUD'
+import { addUser, loginUser } from '../db/userCRUD'
 
 // Todo Type
 const TodoType = new GraphQLObjectType({
@@ -25,6 +26,19 @@ const TodoType = new GraphQLObjectType({
 		description: { type: GraphQLString },
 		completed: { type: GraphQLBoolean },
 		color: { type: GraphQLString },
+	}),
+})
+
+// User Type
+const UserType = new GraphQLObjectType({
+	name: 'User',
+	fields: () => ({
+		id: { type: GraphQLID },
+		email: { type: GraphQLString },
+		password: { type: GraphQLString },
+		currentUser: { type: GraphQLString },
+		status: { type: GraphQLString },
+		message: { type: GraphQLString },
 	}),
 })
 
@@ -95,6 +109,26 @@ const RootMutations = new GraphQLObjectType({
 			},
 			resolve(parent, args) {
 				return deleteTodo(args.id)
+			},
+		},
+		login: {
+			type: UserType,
+			args: {
+				email: { type: new GraphQLNonNull(GraphQLString) },
+				password: { type: new GraphQLNonNull(GraphQLString) },
+			},
+			async resolve(parent, args) {
+				return await loginUser(args.email, args.password)
+			},
+		},
+		register: {
+			type: UserType,
+			args: {
+				email: { type: new GraphQLNonNull(GraphQLString) },
+				password: { type: new GraphQLNonNull(GraphQLString) },
+			},
+			async resolve(parent, args) {
+				return await addUser(args.email, args.password)
 			},
 		},
 	},

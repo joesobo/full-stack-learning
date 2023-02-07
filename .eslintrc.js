@@ -35,6 +35,7 @@ module.exports = {
 		semi: ['error', 'never'],
 		'zod/prefer-enum': 'error',
 		'zod/require-strict': 'error',
+		'vue/multi-word-component-names': 'off',
 	},
 	settings: {
 		tailwindcss: {

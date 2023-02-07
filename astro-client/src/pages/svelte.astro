@@ -1,9 +1,9 @@
 ---
 import TodoDisplay from '../components/TodoDisplay.svelte'
-import BaseLayout from '../layout/BaseLayout.astro'
+import UserLayout from '../layout/UserLayout.astro'
 ---
 
-<BaseLayout>
+<UserLayout>
 	<div
 		class="my-4 flex flex-col rounded border border-solid border-gray-300 p-4"
 	>
@@ -11,4 +11,4 @@ import BaseLayout from '../layout/BaseLayout.astro'
 
 		<TodoDisplay client:load />
 	</div>
-</BaseLayout>
+</UserLayout>

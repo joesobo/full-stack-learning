@@ -2,7 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
 
-import { schema } from './schema/todoSchema'
+import { schema } from './schema/schema'
 
 const app: express.Application = express()
 const port = process.env.PORT || 4000

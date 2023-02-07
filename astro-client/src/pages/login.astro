@@ -1,0 +1,11 @@
+---
+import LoginForm from '../components/LoginForm.vue'
+import BaseLayout from '../layout/BaseLayout.astro'
+---
+
+<BaseLayout>
+	<div class="flex flex-col">
+		<h1 class="mt-4 text-xl">Login</h1>
+		<LoginForm client:load />
+	</div>
+</BaseLayout>
