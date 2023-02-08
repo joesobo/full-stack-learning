@@ -28,6 +28,7 @@ const email = computed(() => user.value?.email ?? '')
 // Redirect to login page if user is not logged in
 watch(user, (val) => {
 	if (val?.status === '400') {
+		alert('You are not logged in. Please log in to continue.')
 		window.location.href = '/login'
 	}
 })
