@@ -27,12 +27,6 @@
       >
         Register
       </button>
-      <button
-        class="mt-4 ml-4 rounded border border-white p-2 text-white"
-        @click="signInWithGoogle"
-      >
-        Sign In With Google
-      </button>
     </div>
     <a
       href="/login"
@@ -81,9 +75,5 @@ const register = async () => {
 			break
 		}
 	}
-}
-
-const signInWithGoogle = () => {
-	console.log(1)
 }
 </script>
